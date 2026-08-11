@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabarito Dinâmico — Provas FGV · Dataprev 2026</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --surface: #1a2332;
+    --surface2: #243044;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #3b82f6;
+    --ok: #22c55e;
+    --ok-bg: #14532d33;
+    --err: #ef4444;
+    --err-bg: #7f1d1d33;
+    --warn: #f59e0b;
+    --anul: #a855f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 { margin: 0 0 .25rem; font-size: 1.25rem; }
+  header p { margin: 0; color: var(--muted); font-size: .875rem; }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .75rem 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 72px;
+    z-index: 99;
+  }
+  .tab {
+    padding: .45rem .85rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: .8rem;
+    transition: .15s;
+  }
+  .tab:hover { border-color: var(--accent); color: var(--text); }
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  main { max-width: 720px; margin: 0 auto; padding: 1rem 1.5rem 6rem; }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .toolbar button {
+    padding: .55rem 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: .875rem;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-danger { background: transparent; color: var(--err); border: 1px solid var(--err); }
+  .stats { font-size: .875rem; color: var(--muted); flex: 1; min-width: 200px; }
+  .stats strong { color: var(--text); }
+  .filter-bar { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .filter-bar input {
+    flex: 1; min-width: 180px;
+    padding: .5rem .75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+  }
+  .q-card {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .6rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .45rem .75rem;
+    margin-bottom: .45rem;
+    transition: border-color .2s, background .2s;
+  }
+  .q-card.checked-ok { border-color: var(--ok); background: var(--ok-bg); }
+  .q-card.checked-err { border-color: var(--err); background: var(--err-bg); }
+  .q-card.checked-anul { border-color: var(--anul); }
+  .q-card.checked-blank { border-color: var(--warn); }
+  .q-num {
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 2.5rem;
+    font-size: .95rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex: 1;
+    min-width: 120px;
+  }
+  .options { display: flex; flex-direction: row; gap: .35rem; flex-wrap: wrap; margin-left: auto; }
+  .opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 .5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    font-size: .875rem;
+    font-weight: 600;
+    transition: background .1s, border-color .1s;
+    user-select: none;
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .opt:has(input:checked) { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .opt.correct { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .opt.wrong-pick { background: var(--err); border-color: var(--err); color: #fff; }
+  .opt.correct-hint { box-shadow: 0 0 0 2px var(--ok); }
+  .result-badge {
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .badge-ok { background: var(--ok); color: #fff; }
+  .badge-err { background: var(--err); color: #fff; }
+  .badge-anul { background: var(--anul); color: #fff; }
+  .badge-blank { background: var(--warn); color: #000; }
+  .feedback {
+    width: 100%;
+    font-size: .78rem;
+    color: var(--muted);
+    padding-top: .15rem;
+  }
+  .summary-panel {
+    display: none;
+    margin-bottom: 1.25rem;
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+  .summary-panel.visible { display: block; }
+  .summary-panel h3 { margin: 0 0 .5rem; font-size: 1rem; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: .75rem;
+  }
+  .summary-item { text-align: center; }
+  .summary-item .val { font-size: 1.5rem; font-weight: 700; }
+  .summary-item .lbl { font-size: .75rem; color: var(--muted); }
+  .hidden { display: none !important; }
+  @media print {
+    header, .tabs, .toolbar, .filter-bar { position: static; }
+    .q-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Gabarito Dinâmico — Provas FGV</h1>
+  <p>Leia o enunciado no PDF da prova · Marque A–E aqui · Clique em "Verificar gabarito"</p>
+</header>
+<div class="tabs" id="tabs"></div>
+<main id="main"></main>
+<script>
+const EXAMS = [{"id": "fortaleza2024", "title": "Fortaleza 2024 — Analista de Informática", "tipo": 1, "total": 70, "questions": [{"n": 1, "answer": "B"}, {"n": 2, "answer": "C"}, {"n": 3, "answer": "D"}, {"n": 4, "answer": "E"}, {"n": 5, "answer": "D"}, {"n": 6, "answer": "E"}, {"n": 7, "answer": "C"}, {"n": 8, "answer": "E"}, {"n": 9, "answer": "B"}, {"n": 10, "answer": "C"}, {"n": 11, "answer": "E"}, {"n": 12, "answer": "A"}, {"n": 13, "answer": "D"}, {"n": 14, "answer": "D"}, {"n": 15, "answer": "B"}, {"n": 16, "answer": "C"}, {"n": 17, "answer": "E"}, {"n": 18, "answer": "B"}, {"n": 19, "answer": "A"}, {"n": 20, "answer": "D"}, {"n": 21, "answer": "B"}, {"n": 22, "answer": "B"}, {"n": 23, "answer": "C"}, {"n": 24, "answer": "C"}, {"n": 25, "answer": "B"}, {"n": 26, "answer": "E"}, {"n": 27, "answer": "B"}, {"n": 28, "answer": "D"}, {"n": 29, "answer": "A"}, {"n": 30, "answer": "D"}, {"n": 31, "answer": "D"}, {"n": 32, "answer": "D"}, {"n": 33, "answer": "C"}, {"n": 34, "answer": "C"}, {"n": 35, "answer": "C"}, {"n": 36, "answer": "B"}, {"n": 37, "answer": "A"}, {"n": 38, "answer": "D"}, {"n": 39, "answer": "B"}, {"n": 40, "answer": "C"}, {"n": 41, "answer": "E"}, {"n": 42, "answer": "C"}, {"n": 43, "answer": "E"}, {"n": 44, "answer": "A"}, {"n": 45, "answer": "B"}, {"n": 46, "answer": "B"}, {"n": 47, "answer": "B"}, {"n": 48, "answer": "B"}, {"n": 49, "answer": "D"}, {"n": 50, "answer": "E"}, {"n": 51, "answer": "D"}, {"n": 52, "answer": "A"}, {"n": 53, "answer": "B"}, {"n": 54, "answer": "B"}, {"n": 55, "answer": "D"}, {"n": 56, "answer": "B"}, {"n": 57, "answer": "D"}, {"n": 58, "answer": "A"}, {"n": 59, "answer": "D"}, {"n": 60, "answer": "B"}, {"n": 61, "answer": "A"}, {"n": 62, "answer": "A"}, {"n": 63, "answer": "C"}, {"n": 64, "answer": "A"}, {"n": 65, "answer": "B"}, {"n": 66, "answer": "C"}, {"n": 67, "answer": "D"}, {"n": 68, "answer": "D"}, {"n": 69, "answer": "D"}, {"n": 70, "answer": "D"}]}, {"id": "senado_sistemas2022", "title": "Senado 2022 — Análise de Sistemas", "tipo": 1, "total": 70, "questions": [{"n": 1, "answer": "E"}, {"n": 2, "answer": "C"}, {"n": 3, "answer": null}, {"n": 4, "answer": "A"}, {"n": 5, "answer": "B"}, {"n": 6, "answer": "C"}, {"n": 7, "answer": "D"}, {"n": 8, "answer": "C"}, {"n": 9, "answer": "C"}, {"n": 10, "answer": "D"}, {"n": 11, "answer": null}, {"n": 12, "answer": "B"}, {"n": 13, "answer": "D"}, {"n": 14, "answer": "C"}, {"n": 15, "answer": "A"}, {"n": 16, "answer": "E"}, {"n": 17, "answer": "D"}, {"n": 18, "answer": "B"}, {"n": 19, "answer": "C"}, {"n": 20, "answer": "D"}, {"n": 21, "answer": "A"}, {"n": 22, "answer": "E"}, {"n": 23, "answer": "A"}, {"n": 24, "answer": "D"}, {"n": 25, "answer": null}, {"n": 26, "answer": "B"}, {"n": 27, "answer": "A"}, {"n": 28, "answer": "C"}, {"n": 29, "answer": "D"}, {"n": 30, "answer": "C"}, {"n": 31, "answer": "E"}, {"n": 32, "answer": "C"}, {"n": 33, "answer": "B"}, {"n": 34, "answer": "A"}, {"n": 35, "answer": "A"}, {"n": 36, "answer": "B"}, {"n": 37, "answer": "D"}, {"n": 38, "answer": "B"}, {"n": 39, "answer": "E"}, {"n": 40, "answer": "E"}, {"n": 41, "answer": "D"}, {"n": 42, "answer": "B"}, {"n": 43, "answer": null}, {"n": 44, "answer": "E"}, {"n": 45, "answer": "A"}, {"n": 46, "answer": null}, {"n": 47, "answer": null}, {"n": 48, "answer": "E"}, {"n": 49, "answer": "A"}, {"n": 50, "answer": "B"}, {"n": 51, "answer": "D"}, {"n": 52, "answer": "E"}, {"n": 53, "answer": "B"}, {"n": 54, "answer": null}, {"n": 55, "answer": null}, {"n": 56, "answer": null}, {"n": 57, "answer": "E"}, {"n": 58, "answer": "D"}, {"n": 59, "answer": null}, {"n": 60, "answer": "A"}, {"n": 61, "answer": null}, {"n": 62, "answer": null}, {"n": 63, "answer": "B"}, {"n": 64, "answer": "D"}, {"n": 65, "answer": "B"}, {"n": 66, "answer": "D"}, {"n": 67, "answer": "B"}, {"n": 68, "answer": "E"}, {"n": 69, "answer": "A"}, {"n": 70, "answer": "D"}]}, {"id": "senado_suporte2022", "title": "Senado 2022 — Análise de Suporte", "tipo": 1, "total": 70, "questions": [{"n": 1, "answer": "E"}, {"n": 2, "answer": "C"}, {"n": 3, "answer": null}, {"n": 4, "answer": "A"}, {"n": 5, "answer": "B"}, {"n": 6, "answer": "C"}, {"n": 7, "answer": "D"}, {"n": 8, "answer": "C"}, {"n": 9, "answer": "C"}, {"n": 10, "answer": "D"}, {"n": 11, "answer": null}, {"n": 12, "answer": "B"}, {"n": 13, "answer": "D"}, {"n": 14, "answer": "C"}, {"n": 15, "answer": "A"}, {"n": 16, "answer": "E"}, {"n": 17, "answer": "D"}, {"n": 18, "answer": "B"}, {"n": 19, "answer": "C"}, {"n": 20, "answer": "D"}, {"n": 21, "answer": "A"}, {"n": 22, "answer": "E"}, {"n": 23, "answer": "A"}, {"n": 24, "answer": "D"}, {"n": 25, "answer": null}, {"n": 26, "answer": "B"}, {"n": 27, "answer": "A"}, {"n": 28, "answer": "C"}, {"n": 29, "answer": "D"}, {"n": 30, "answer": "C"}, {"n": 31, "answer": "E"}, {"n": 32, "answer": "C"}, {"n": 33, "answer": "B"}, {"n": 34, "answer": "A"}, {"n": 35, "answer": "A"}, {"n": 36, "answer": "B"}, {"n": 37, "answer": "D"}, {"n": 38, "answer": "B"}, {"n": 39, "answer": "E"}, {"n": 40, "answer": "E"}, {"n": 41, "answer": "D"}, {"n": 42, "answer": "B"}, {"n": 43, "answer": "E"}, {"n": 44, "answer": "A"}, {"n": 45, "answer": "D"}, {"n": 46, "answer": "D"}, {"n": 47, "answer": "B"}, {"n": 48, "answer": "E"}, {"n": 49, "answer": null}, {"n": 50, "answer": "A"}, {"n": 51, "answer": "D"}, {"n": 52, "answer": null}, {"n": 53, "answer": "C"}, {"n": 54, "answer": "D"}, {"n": 55, "answer": "E"}, {"n": 56, "answer": "D"}, {"n": 57, "answer": "A"}, {"n": 58, "answer": "C"}, {"n": 59, "answer": "C"}, {"n": 60, "answer": "E"}, {"n": 61, "answer": "B"}, {"n": 62, "answer": "D"}, {"n": 63, "answer": "C"}, {"n": 64, "answer": "D"}, {"n": 65, "answer": "C"}, {"n": 66, "answer": "E"}, {"n": 67, "answer": "B"}, {"n": 68, "answer": "E"}, {"n": 69, "answer": "A"}, {"n": 70, "answer": "D"}]}, {"id": "camara2023", "title": "Câmara 2023 — Informática Legislativa", "tipo": 1, "total": 70, "questions": [{"n": 1, "answer": "E"}, {"n": 2, "answer": "B"}, {"n": 3, "answer": "D"}, {"n": 4, "answer": "C"}, {"n": 5, "answer": "A"}, {"n": 6, "answer": "C"}, {"n": 7, "answer": "A"}, {"n": 8, "answer": "D"}, {"n": 9, "answer": "C"}, {"n": 10, "answer": "E"}, {"n": 11, "answer": "D"}, {"n": 12, "answer": "B"}, {"n": 13, "answer": "A"}, {"n": 14, "answer": "B"}, {"n": 15, "answer": "C"}, {"n": 16, "answer": "D"}, {"n": 17, "answer": "B"}, {"n": 18, "answer": "A"}, {"n": 19, "answer": "E"}, {"n": 20, "answer": "D"}, {"n": 21, "answer": "A"}, {"n": 22, "answer": "C"}, {"n": 23, "answer": "D"}, {"n": 24, "answer": "E"}, {"n": 25, "answer": "C"}, {"n": 26, "answer": "E"}, {"n": 27, "answer": "C"}, {"n": 28, "answer": "A"}, {"n": 29, "answer": "D"}, {"n": 30, "answer": "C"}, {"n": 31, "answer": "E"}, {"n": 32, "answer": "B"}, {"n": 33, "answer": "A"}, {"n": 34, "answer": "D"}, {"n": 35, "answer": "C"}, {"n": 36, "answer": "D"}, {"n": 37, "answer": "D"}, {"n": 38, "answer": "A"}, {"n": 39, "answer": "D"}, {"n": 40, "answer": "C"}, {"n": 41, "answer": "E"}, {"n": 42, "answer": "B"}, {"n": 43, "answer": "B"}, {"n": 44, "answer": "D"}, {"n": 45, "answer": "E"}, {"n": 46, "answer": "A"}, {"n": 47, "answer": "C"}, {"n": 48, "answer": "D"}, {"n": 49, "answer": "A"}, {"n": 50, "answer": "E"}, {"n": 51, "answer": "B"}, {"n": 52, "answer": "E"}, {"n": 53, "answer": "C"}, {"n": 54, "answer": "A"}, {"n": 55, "answer": "D"}, {"n": 56, "answer": "B"}, {"n": 57, "answer": "A"}, {"n": 58, "answer": "D"}, {"n": 59, "answer": "B"}, {"n": 60, "answer": "D"}, {"n": 61, "answer": "E"}, {"n": 62, "answer": "A"}, {"n": 63, "answer": "C"}, {"n": 64, "answer": "B"}, {"n": 65, "answer": "D"}, {"n": 66, "answer": "E"}, {"n": 67, "answer": "A"}, {"n": 68, "answer": "B"}, {"n": 69, "answer": "D"}, {"n": 70, "answer": "A"}]}, {"id": "tcepa2024", "title": "TCE-PA 2024 — Analista de Segurança", "tipo": 1, "total": 100, "questions": [{"n": 1, "answer": "C"}, {"n": 2, "answer": "B"}, {"n": 3, "answer": "E"}, {"n": 4, "answer": "B"}, {"n": 5, "answer": "A"}, {"n": 6, "answer": "E"}, {"n": 7, "answer": "C"}, {"n": 8, "answer": "A"}, {"n": 9, "answer": "D"}, {"n": 10, "answer": "B"}, {"n": 11, "answer": "E"}, {"n": 12, "answer": "E"}, {"n": 13, "answer": "D"}, {"n": 14, "answer": "B"}, {"n": 15, "answer": "B"}, {"n": 16, "answer": "A"}, {"n": 17, "answer": "B"}, {"n": 18, "answer": "A"}, {"n": 19, "answer": "C"}, {"n": 20, "answer": "E"}, {"n": 21, "answer": "A"}, {"n": 22, "answer": "C"}, {"n": 23, "answer": "D"}, {"n": 24, "answer": "C"}, {"n": 25, "answer": "C"}, {"n": 26, "answer": "C"}, {"n": 27, "answer": "C"}, {"n": 28, "answer": "A"}, {"n": 29, "answer": "E"}, {"n": 30, "answer": "D"}, {"n": 31, "answer": "B"}, {"n": 32, "answer": "C"}, {"n": 33, "answer": "B"}, {"n": 34, "answer": "D"}, {"n": 35, "answer": "C"}, {"n": 36, "answer": "B"}, {"n": 37, "answer": "D"}, {"n": 38, "answer": "C"}, {"n": 39, "answer": "C"}, {"n": 40, "answer": "D"}, {"n": 41, "answer": "A"}, {"n": 42, "answer": "A"}, {"n": 43, "answer": "C"}, {"n": 44, "answer": "C"}, {"n": 45, "answer": "C"}, {"n": 46, "answer": "B"}, {"n": 47, "answer": "C"}, {"n": 48, "answer": "E"}, {"n": 49, "answer": "B"}, {"n": 50, "answer": "D"}, {"n": 51, "answer": "E"}, {"n": 52, "answer": "B"}, {"n": 53, "answer": "A"}, {"n": 54, "answer": "D"}, {"n": 55, "answer": "A"}, {"n": 56, "answer": "B"}, {"n": 57, "answer": "C"}, {"n": 58, "answer": "B"}, {"n": 59, "answer": "C"}, {"n": 60, "answer": "D"}, {"n": 61, "answer": "E"}, {"n": 62, "answer": "E"}, {"n": 63, "answer": "D"}, {"n": 64, "answer": "C"}, {"n": 65, "answer": "D"}, {"n": 66, "answer": "D"}, {"n": 67, "answer": "E"}, {"n": 68, "answer": "A"}, {"n": 69, "answer": "C"}, {"n": 70, "answer": "D"}, {"n": 71, "answer": "E"}, {"n": 72, "answer": "C"}, {"n": 73, "answer": "C"}, {"n": 74, "answer": "C"}, {"n": 75, "answer": "D"}, {"n": 76, "answer": "C"}, {"n": 77, "answer": "D"}, {"n": 78, "answer": "E"}, {"n": 79, "answer": "B"}, {"n": 80, "answer": "E"}, {"n": 81, "answer": "B"}, {"n": 82, "answer": "B"}, {"n": 83, "answer": "C"}, {"n": 84, "answer": "B"}, {"n": 85, "answer": "E"}, {"n": 86, "answer": "C"}, {"n": 87, "answer": "E"}, {"n": 88, "answer": "E"}, {"n": 89, "answer": "D"}, {"n": 90, "answer": "D"}, {"n": 91, "answer": "B"}, {"n": 92, "answer": "B"}, {"n": 93, "answer": "E"}, {"n": 94, "answer": "D"}, {"n": 95, "answer": "A"}, {"n": 96, "answer": "B"}, {"n": 97, "answer": "E"}, {"n": 98, "answer": "E"}, {"n": 99, "answer": "C"}, {"n": 100, "answer": "D"}]}];
+
+let currentExam = EXAMS[0]?.id || '';
+let checked = false;
+
+function storageKey(examId) {
+  return 'gabarito_dataprev_' + examId;
+}
+
+function loadAnswers(examId) {
+  try { return JSON.parse(localStorage.getItem(storageKey(examId)) || '{}'); }
+  catch { return {}; }
+}
+
+function saveAnswer(examId, qn, letter) {
+  const data = loadAnswers(examId);
+  data[qn] = letter;
+  localStorage.setItem(storageKey(examId), JSON.stringify(data));
+}
+
+function clearExam(examId) {
+  localStorage.removeItem(storageKey(examId));
+}
+
+function examById(id) { return EXAMS.find(e => e.id === id); }
+
+function renderTabs() {
+  const el = document.getElementById('tabs');
+  el.innerHTML = EXAMS.map(e =>
+    `<button class="tab${e.id === currentExam ? ' active' : ''}" data-id="${e.id}">${e.title}</button>`
+  ).join('');
+  el.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentExam = btn.dataset.id;
+      checked = false;
+      renderTabs();
+      renderExam();
+    });
+  });
+}
+
+function renderExam() {
+  const exam = examById(currentExam);
+  if (!exam) return;
+  const answers = loadAnswers(currentExam);
+  const answered = exam.questions.filter(q => answers[q.n]).length;
+
+  document.getElementById('main').innerHTML = `
+    <div class="toolbar">
+      <button class="btn-primary" id="btnCheck">Verificar gabarito</button>
+      <button class="btn-secondary" id="btnReset">Limpar respostas</button>
+      <button class="btn-secondary" id="btnHide">Ocultar resultado</button>
+      <div class="stats">
+        <strong>${exam.title}</strong> · Tipo ${exam.tipo} ·
+        ${answered}/${exam.total} marcadas
+      </div>
+    </div>
+    <div class="summary-panel" id="summary"></div>
+    <div class="filter-bar">
+      <input type="search" id="searchQ" placeholder="Filtrar por número da questão…">
+      <label style="font-size:.8rem;color:var(--muted)">
+        <input type="checkbox" id="onlyMarked"> Só marcadas
+      </label>
+    </div>
+    <div id="questions"></div>
+  `;
+
+  renderQuestions(exam, answers);
+
+  document.getElementById('btnCheck').onclick = () => { checked = true; renderQuestions(exam, loadAnswers(currentExam)); showSummary(exam); };
+  document.getElementById('btnReset').onclick = () => {
+    if (confirm('Limpar todas as respostas desta prova?')) {
+      clearExam(currentExam); checked = false; renderExam();
+    }
+  };
+  document.getElementById('btnHide').onclick = () => {
+    checked = false;
+    document.getElementById('summary').classList.remove('visible');
+    renderQuestions(exam, loadAnswers(currentExam));
+  };
+  document.getElementById('searchQ').oninput = filterQuestions;
+  document.getElementById('onlyMarked').onchange = filterQuestions;
+}
+
+function showSummary(exam) {
+  const answers = loadAnswers(currentExam);
+  let acertos = 0, erros = 0, brancos = 0, anuladas = 0;
+  exam.questions.forEach(q => {
+    const pick = answers[q.n];
+    if (q.answer === null) { anuladas++; return; }
+    if (!pick) { brancos++; return; }
+    if (pick === q.answer) acertos++; else erros++;
+  });
+  const panel = document.getElementById('summary');
+  panel.classList.add('visible');
+  panel.innerHTML = `
+    <h3>Resultado</h3>
+    <div class="summary-grid">
+      <div class="summary-item"><div class="val" style="color:var(--ok)">${acertos}</div><div class="lbl">Acertos</div></div>
+      <div class="summary-item"><div class="val" style="color:var(--err)">${erros}</div><div class="lbl">Erros</div></div>
+      <div class="summary-item"><div class="val" style="color:var(--warn)">${brancos}</div><div class="lbl">Não marcadas</div></div>
+      <div class="summary-item"><div class="val" style="color:var(--anul)">${anuladas}</div><div class="lbl">Anuladas</div></div>
+      <div class="summary-item"><div class="val">${exam.questions.length ? Math.round(acertos/exam.questions.filter(q=>q.answer).length*100) : 0}%</div><div class="lbl">Aproveitamento*</div></div>
+    </div>
+    <p style="font-size:.75rem;color:var(--muted);margin:.75rem 0 0">* Desconsidera questões anuladas no cálculo.</p>
+  `;
+}
+
+function renderQuestions(exam, answers) {
+  const container = document.getElementById('questions');
+  if (!container) return;
+  container.innerHTML = exam.questions.map(q => {
+    const pick = answers[q.n];
+    let cardClass = '';
+    let badge = '';
+    let feedbackHtml = '';
+
+    if (checked) {
+      if (q.answer === null) {
+        cardClass = 'checked-anul';
+        badge = '<span class="result-badge badge-anul">ANULADA</span>';
+        feedbackHtml = 'Questão anulada no gabarito oficial.';
+      } else if (!pick) {
+        cardClass = 'checked-blank';
+        badge = '<span class="result-badge badge-blank">EM BRANCO</span>';
+        feedbackHtml = `Correta: <strong>${q.answer}</strong>`;
+      } else if (pick === q.answer) {
+        cardClass = 'checked-ok';
+        badge = '<span class="result-badge badge-ok">OK</span>';
+      } else {
+        cardClass = 'checked-err';
+        badge = '<span class="result-badge badge-err">ERRO</span>';
+        feedbackHtml = `Você: <strong>${pick}</strong> · Correta: <strong>${q.answer}</strong>`;
+      }
+    }
+
+    const opts = ['A','B','C','D','E'].map(letter => {
+      let cls = 'opt';
+      if (checked && q.answer && letter === q.answer) cls += ' correct';
+      if (checked && pick && pick !== q.answer && letter === q.answer) cls += ' correct-hint';
+      if (checked && pick === letter && letter !== q.answer) cls += ' wrong-pick';
+      return `<label class="${cls}">
+        <input type="radio" name="q${q.n}" value="${letter}" ${pick===letter?'checked':''} ${checked?'disabled':''}>
+        <span>${letter}</span>
+      </label>`;
+    }).join('');
+
+    return `<article class="q-card ${cardClass}" data-n="${q.n}">
+      <span class="q-num">${q.n}</span>
+      <div class="q-meta">${badge}${feedbackHtml ? `<span class="feedback">${feedbackHtml}</span>` : ''}</div>
+      <div class="options">${opts}</div>
+    </article>`;
+  }).join('');
+
+  container.querySelectorAll('input[type=radio]').forEach(inp => {
+    inp.addEventListener('change', e => {
+      if (checked) return;
+      saveAnswer(currentExam, parseInt(inp.name.slice(1)), e.target.value);
+      const exam = examById(currentExam);
+      const answered = exam.questions.filter(q => loadAnswers(currentExam)[q.n]).length;
+      document.querySelector('.stats').innerHTML = `
+        <strong>${exam.title}</strong> · Tipo ${exam.tipo} ·
+        ${answered}/${exam.total} marcadas`;
+    });
+  });
+  filterQuestions();
+}
+
+function filterQuestions() {
+  const q = (document.getElementById('searchQ')?.value || '').trim();
+  const only = document.getElementById('onlyMarked')?.checked;
+  const answers = loadAnswers(currentExam);
+  document.querySelectorAll('.q-card').forEach(card => {
+    const n = card.dataset.n;
+    const matchSearch = !q || n.includes(q);
+    const matchMarked = !only || !!answers[n];
+    card.classList.toggle('hidden', !(matchSearch && matchMarked));
+  });
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+}
+
+renderTabs();
+renderExam();
+</script>
+</body>
+</html>
