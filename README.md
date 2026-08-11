@@ -10,6 +10,24 @@ Este repositório aplica o método ao **Concurso Dataprev 2026 — Perfil 1: An�
 
 ---
 
+## O que é um PWA? (para quem nunca ouviu falar)
+
+**PWA** significa *Progressive Web App* — em português, algo como “aplicativo web progressivo”.
+
+Na prática, é um **site que se comporta quase como um app de celular**:
+
+- Você abre pelo **navegador** (Chrome, Safari, Edge etc.), sem ir à App Store / Play Store.  
+- Pode **“instalar”** na tela inicial (“Adicionar à tela inicial” / “Instalar aplicativo”).  
+- Depois abre em **tela cheia**, com ícone próprio, como WhatsApp ou Instagram.  
+- Em muitos casos funciona **mesmo sem internet** (ou com conexão ruim), porque o celular guarda uma cópia local.  
+- Suas marcações de resposta ficam salvas **no próprio aparelho** (não precisam de login).
+
+Pense assim: em vez de baixar um programa pesado, você usa uma **página web inteligente** que vira atalho no celular. Ideal para estudar no ônibus, na pausa do almoço ou no sofá — com o PDF da prova aberto e o gabarito dinâmico ao lado.
+
+Neste projeto, o PWA é a pasta `gabarito-dinamico/` (publicável no GitHub Pages).
+
+---
+
 ## O que construímos aqui (visão geral)
 
 | Artefato | Função |
