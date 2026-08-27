@@ -31,4 +31,6 @@ O gerador antigo só de gabarito (sem enunciado) continua em `provas-fgv/build_g
 | `index.html` | Shell + CSS |
 | `app.js` | Filtros, quiz, resultados, localStorage |
 | `data.js` | Questões geradas (não editar à mão) |
-| `manifest.webmanifest` / `sw.js` / `icon.svg` | PWA |
+| `manifest.webmanifest` / `sw.js` | PWA |
+| `icon.svg`, `favicon-32.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png` | Favicon e ícones PWA |
+| `gen_icons.py` | Regenera os ícones |

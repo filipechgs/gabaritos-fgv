@@ -1,5 +1,5 @@
 /* Service worker — Prova FGV PWA */
-const CACHE = 'prova-fgv-v2';
+const CACHE = 'prova-fgv-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,11 @@ const ASSETS = [
   './data.js',
   './manifest.webmanifest',
   './icon.svg',
+  './favicon-32.png',
+  './apple-touch-icon.png',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-maskable-512.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -25,7 +30,6 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  // network-first para não ficar preso em JS antigo
   event.respondWith(
     fetch(event.request)
       .then((response) => {

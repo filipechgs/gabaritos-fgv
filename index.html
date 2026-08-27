@@ -10,8 +10,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Prova FGV">
 <link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./icon.svg">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png" sizes="180x180">
 <title>Prova FGV — Guia</title>
 <style>
   :root {
@@ -52,7 +53,12 @@
     border-bottom: 1px solid var(--border);
   }
   .nav-brand { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
-  .nav-brand-emoji { font-size: 1.25rem; }
+  .nav-brand-icon {
+    width: 1.55rem;
+    height: 1.55rem;
+    border-radius: 6px;
+    display: block;
+  }
   .nav-brand-text { font-size: .8rem; font-weight: 700; }
   .nav-status {
     flex: 1; min-width: 0; font-size: .75rem; color: var(--muted);
@@ -182,7 +188,7 @@
 <body>
 <nav class="navbar" aria-label="Principal">
   <div class="nav-brand">
-    <span class="nav-brand-emoji" aria-hidden="true">📝</span>
+    <img class="nav-brand-icon" src="./icon-192.png" width="28" height="28" alt="">
     <span class="nav-brand-text">Prova FGV</span>
   </div>
   <div class="nav-status" id="navStatus">Carregando…</div>

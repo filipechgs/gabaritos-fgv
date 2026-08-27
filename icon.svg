@@ -1,4 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Gabarito FGV">
-  <rect width="512" height="512" rx="96" fill="#1a2332"/>
-  <text x="256" y="300" text-anchor="middle" font-size="280" font-family="Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji, sans-serif">??</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Prova FGV">
+  <rect width="512" height="512" rx="92" fill="#1a2332"/>
+  <rect x="110" y="118" width="292" height="320" rx="36" fill="#243044" stroke="#3b82f6" stroke-width="14"/>
+  <rect x="184" y="78" width="144" height="60" rx="18" fill="#3b82f6"/>
+  <rect x="226" y="96" width="60" height="24" rx="8" fill="#1a2332"/>
+  <circle cx="168" cy="210" r="18" fill="#22c55e"/>
+  <path d="M158 210 l7 8 14-16" fill="none" stroke="#1a2332" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="200" y="202" width="160" height="16" rx="8" fill="#e2e8f0"/>
+  <circle cx="168" cy="278" r="18" fill="#22c55e"/>
+  <path d="M158 278 l7 8 14-16" fill="none" stroke="#1a2332" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="200" y="270" width="160" height="16" rx="8" fill="#e2e8f0"/>
+  <circle cx="168" cy="346" r="18" fill="none" stroke="#94a3b8" stroke-width="6"/>
+  <rect x="200" y="338" width="160" height="16" rx="8" fill="#94a3b8"/>
+  <rect x="318" y="352" width="64" height="64" rx="16" fill="#3b82f6"/>
+  <path d="M334 384 l12 14 24-28" fill="none" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
