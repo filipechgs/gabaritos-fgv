@@ -1,8 +1,10 @@
-/* Service worker — Gabarito Dinâmico PWA */
-const CACHE = 'gabarito-dinamico-v4';
+/* Service worker — Prova FGV PWA */
+const CACHE = 'prova-fgv-v2';
 const ASSETS = [
   './',
   './index.html',
+  './app.js',
+  './data.js',
   './manifest.webmanifest',
   './icon.svg',
 ];
@@ -23,18 +25,16 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  // network-first para não ficar preso em JS antigo
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const fetched = fetch(event.request)
-        .then((response) => {
-          if (response && response.ok && response.type === 'basic') {
-            const clone = response.clone();
-            caches.open(CACHE).then((cache) => cache.put(event.request, clone));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || fetched;
-    })
+    fetch(event.request)
+      .then((response) => {
+        if (response && response.ok && response.type === 'basic') {
+          const clone = response.clone();
+          caches.open(CACHE).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

@@ -1,7 +1,7 @@
 {
-  "name": "Gabarito FGV",
-  "short_name": "Gabarito FGV",
-  "description": "Marque respostas e confira o gabarito das provas FGV para o concurso Dataprev.",
+  "name": "Prova FGV",
+  "short_name": "Prova FGV",
+  "description": "Provas FGV com enunciado — responda, confira gabarito e veja resultados por assunto.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

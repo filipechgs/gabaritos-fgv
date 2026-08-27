@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1a2332">
-<meta name="description" content="Gabarito FGV — marque A–E e confira o resultado das provas.">
-<meta name="application-name" content="Gabarito FGV">
+<meta name="description" content="Questões-guia FGV do edital Dataprev — responda, confira e veja resultados por assunto.">
+<meta name="application-name" content="Prova FGV">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Gabarito FGV">
+<meta name="apple-mobile-web-app-title" content="Prova FGV">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="./icon.svg">
-<title>Gabarito FGV</title>
+<title>Prova FGV — Guia</title>
 <style>
   :root {
     --bg: #0f1419;
@@ -23,777 +23,187 @@
     --muted: #94a3b8;
     --accent: #3b82f6;
     --ok: #22c55e;
-    --ok-bg: #14532d33;
+    --ok-bg: #14532d44;
     --err: #ef4444;
-    --err-bg: #7f1d1d33;
+    --err-bg: #7f1d1d44;
     --warn: #f59e0b;
-    --anul: #a855f7;
-    --geral: #22d3ee;
-    --geral-bg: #08334466;
-    --nav-h: 3.5rem;
+    --img: #f472b6;
+    --nav-h: 3.4rem;
     --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bot: env(safe-area-inset-bottom, 0px);
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
   body {
     margin: 0;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: "Segoe UI", system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.5;
     padding-top: calc(var(--nav-h) + var(--safe-top));
+    padding-bottom: calc(3.5rem + var(--safe-bot));
   }
   .navbar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 200;
-    display: flex;
-    align-items: center;
-    gap: .65rem;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; gap: .6rem;
     min-height: calc(var(--nav-h) + var(--safe-top));
-    padding: var(--safe-top) .75rem 0 .9rem;
+    padding: var(--safe-top) .75rem 0 .85rem;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
   }
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    flex-shrink: 0;
+  .nav-brand { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+  .nav-brand-emoji { font-size: 1.25rem; }
+  .nav-brand-text { font-size: .8rem; font-weight: 700; }
+  .nav-status {
+    flex: 1; min-width: 0; font-size: .75rem; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-align: right;
   }
-  .nav-brand-emoji {
-    font-size: 1.35rem;
-    line-height: 1;
+  .bottom-nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: .25rem; padding: .35rem .5rem calc(.4rem + var(--safe-bot));
+    background: var(--surface); border-top: 1px solid var(--border);
   }
-  .nav-brand-text {
-    font-size: .78rem;
-    font-weight: 700;
-    letter-spacing: .01em;
-    color: var(--text);
-    line-height: 1.15;
-    white-space: nowrap;
+  .bottom-nav button {
+    border: none; background: transparent; color: var(--muted);
+    padding: .45rem .25rem; border-radius: 8px; cursor: pointer;
+    font-size: .72rem; font-weight: 600;
   }
-  .nav-exam {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: .1rem;
-    padding: .35rem .55rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: inherit;
-    cursor: pointer;
-    text-align: left;
+  .bottom-nav button.active { color: var(--accent); background: #3b82f622; }
+  .bottom-nav .ico { display: block; font-size: 1.1rem; line-height: 1.2; }
+  main { max-width: 760px; margin: 0 auto; padding: .9rem 1rem 1.5rem; }
+  h1 { font-size: 1.25rem; margin: 0 0 .35rem; }
+  .lead { color: var(--muted); font-size: .88rem; margin: 0 0 1.1rem; }
+  .panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem; margin-bottom: 1rem;
   }
-  .nav-exam:hover, .nav-exam:focus-visible {
-    border-color: var(--accent);
-    outline: none;
+  .panel h2 { margin: 0 0 .75rem; font-size: .95rem; }
+  label.field { display: block; font-size: .75rem; color: var(--muted); margin: 0 0 .35rem; }
+  select, input[type="search"] {
+    width: 100%; padding: .65rem .75rem; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+    font-size: .9rem; margin-bottom: .85rem;
   }
-  .nav-exam-label {
-    font-size: .65rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .04em;
-  }
-  .nav-exam-title {
-    font-size: .82rem;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .nav-exam-meta {
-    font-size: .7rem;
-    color: var(--muted);
-  }
-  .nav-chevron {
-    flex-shrink: 0;
-    opacity: .7;
-    font-size: .75rem;
-  }
-  .hint {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: .75rem 1.25rem 0;
-    color: var(--muted);
-    font-size: .8rem;
-  }
-  main { max-width: 720px; margin: 0 auto; padding: .75rem 1.25rem 6rem; }
-  .toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .75rem;
-    align-items: center;
-    margin-bottom: 1.25rem;
-    padding: 1rem;
-    background: var(--surface);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-  }
-  .toolbar button {
-    padding: .55rem 1.1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: .875rem;
+  .row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+  .btn {
+    border: none; border-radius: 8px; padding: .6rem 1rem;
+    font-weight: 600; font-size: .875rem; cursor: pointer;
   }
   .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { filter: brightness(1.1); }
   .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .stats { font-size: .875rem; color: var(--muted); flex: 1; min-width: 160px; }
-  .stats strong { color: var(--text); }
-  .filter-bar { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
-  .filter-bar input {
-    flex: 1; min-width: 160px;
-    padding: .5rem .75rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
+  .btn-ghost { background: transparent; color: var(--accent); border: 1px solid transparent; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: .5rem 0 0; }
+  .chip {
+    font-size: .72rem; padding: .2rem .55rem; border-radius: 999px;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
   }
-  .section-block { margin-bottom: 1.35rem; }
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: .75rem;
-    flex-wrap: wrap;
-    margin: 1.1rem 0 .55rem;
-    padding: .45rem .65rem;
-    border-left: 3px solid var(--accent);
-    background: linear-gradient(90deg, #243044aa, transparent);
-    border-radius: 0 8px 8px 0;
-  }
-  .section-head h3 {
-    margin: 0;
-    font-size: .92rem;
-    font-weight: 700;
-  }
-  .section-head .sec-range {
-    font-size: .72rem;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
-  .guide-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .55rem 1rem;
-    align-items: center;
-    margin-bottom: .85rem;
-    padding: .65rem .85rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    font-size: .78rem;
-    color: var(--muted);
-  }
-  .guide-swatch {
-    display: inline-block;
-    width: .85rem;
-    height: .85rem;
-    border-radius: 3px;
-    vertical-align: -2px;
-    margin-right: .25rem;
-  }
-  .guide-swatch.esp {
-    background: #f59e0b33;
-    border: 2px solid var(--warn);
-  }
-  .guide-swatch.geral {
-    background: #22d3ee33;
-    border: 2px solid var(--geral);
-  }
-  .guide-legend .lbl-esp { color: var(--warn); font-weight: 700; }
-  .guide-legend .lbl-geral { color: var(--geral); font-weight: 700; }
+  .chip.accent { color: var(--accent); border-color: #3b82f688; }
+  .chip.warn { color: var(--warn); border-color: #f59e0b88; }
+  .chip.img { color: var(--img); border-color: #f472b688; }
   .q-card {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: .6rem 1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: .45rem .75rem;
-    margin-bottom: .45rem;
-    transition: border-color .2s, background .2s;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem; margin-bottom: .9rem;
   }
-  .q-card.guide-esp {
-    border-color: #f59e0b99;
-    background: linear-gradient(90deg, #f59e0b22, var(--surface) 42%);
-    box-shadow: inset 3px 0 0 var(--warn);
+  .q-card.ok { border-color: var(--ok); background: linear-gradient(180deg, var(--ok-bg), var(--surface)); }
+  .q-card.err { border-color: var(--err); background: linear-gradient(180deg, var(--err-bg), var(--surface)); }
+  .q-head { display: flex; flex-wrap: wrap; gap: .4rem .65rem; align-items: center; margin-bottom: .65rem; }
+  .q-num { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .q-exam { font-size: .72rem; color: var(--muted); }
+  .stem {
+    white-space: pre-wrap; font-size: .92rem; margin: 0 0 .85rem;
+    word-break: break-word;
   }
-  .q-card.guide-esp .q-num { color: var(--warn); }
-  .q-card.guide-geral {
-    border-color: #22d3ee99;
-    background: linear-gradient(90deg, #22d3ee22, var(--surface) 42%);
-    box-shadow: inset 3px 0 0 var(--geral);
-  }
-  .q-card.guide-geral .q-num { color: var(--geral); }
-  .badge-guide-esp { background: var(--warn); color: #111; }
-  .badge-guide-geral { background: var(--geral); color: #083344; }
-  .guide-topic {
-    font-size: .72rem;
-    color: var(--muted);
-    width: 100%;
-    order: 5;
-  }
-  .guide-topic em.esp { color: var(--warn); font-style: normal; font-weight: 700; }
-  .guide-topic em.geral { color: var(--geral); font-style: normal; font-weight: 700; }
-  .q-card.checked-ok { border-color: var(--ok); background: var(--ok-bg); }
-  .q-card.checked-err { border-color: var(--err); background: var(--err-bg); }
-  .q-card.checked-anul { border-color: var(--anul); }
-  .q-card.checked-blank { border-color: var(--warn); }
-  .q-card.guide-esp.checked-ok,
-  .q-card.guide-esp.checked-err,
-  .q-card.guide-esp.checked-blank,
-  .q-card.guide-esp.checked-anul { box-shadow: inset 3px 0 0 var(--warn); }
-  .q-card.guide-geral.checked-ok,
-  .q-card.guide-geral.checked-err,
-  .q-card.guide-geral.checked-blank,
-  .q-card.guide-geral.checked-anul { box-shadow: inset 3px 0 0 var(--geral); }
-  .q-num {
-    font-weight: 700;
-    color: var(--accent);
-    min-width: 2.5rem;
-    font-size: .95rem;
-    font-variant-numeric: tabular-nums;
-  }
-  .q-meta {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    flex: 1;
-    min-width: 100px;
-  }
-  .options { display: flex; flex-direction: row; gap: .35rem; flex-wrap: wrap; margin-left: auto; }
+  .opts { display: flex; flex-direction: column; gap: .45rem; }
   .opt {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 2.4rem;
-    height: 2.4rem;
-    padding: 0 .5rem;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    cursor: pointer;
-    font-size: .875rem;
-    font-weight: 600;
-    transition: background .1s, border-color .1s;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    display: flex; gap: .65rem; align-items: flex-start;
+    padding: .65rem .7rem; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface2);
+    cursor: pointer; text-align: left; color: inherit; width: 100%;
   }
   .opt:hover { border-color: var(--accent); }
-  .opt input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .opt:has(input:checked) { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .opt.correct { background: var(--ok); border-color: var(--ok); color: #fff; }
-  .opt.wrong-pick { background: var(--err); border-color: var(--err); color: #fff; }
-  .opt.correct-hint { box-shadow: 0 0 0 2px var(--ok); }
-  .result-badge {
-    font-size: .75rem;
-    font-weight: 600;
-    padding: .2rem .55rem;
-    border-radius: 999px;
-    white-space: nowrap;
+  .opt.selected { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .opt.correct { border-color: var(--ok); background: var(--ok-bg); }
+  .opt.wrong { border-color: var(--err); background: var(--err-bg); }
+  .opt-letter {
+    flex-shrink: 0; width: 1.6rem; height: 1.6rem; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .8rem; background: var(--border); color: var(--text);
   }
-  .badge-ok { background: var(--ok); color: #fff; }
-  .badge-err { background: var(--err); color: #fff; }
-  .badge-anul { background: var(--anul); color: #fff; }
-  .badge-blank { background: var(--warn); color: #000; }
-  .feedback {
-    width: 100%;
-    font-size: .78rem;
-    color: var(--muted);
-    padding-top: .15rem;
-  }
-  .summary-panel {
-    display: none;
-    margin-bottom: 1.25rem;
-    padding: 1rem 1.25rem;
-    border-radius: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-  }
-  .summary-panel.visible { display: block; }
-  .summary-panel h3 { margin: 0 0 .5rem; font-size: 1rem; }
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    gap: .75rem;
-  }
-  .summary-item { text-align: center; }
-  .summary-item .val { font-size: 1.5rem; font-weight: 700; }
-  .summary-item .lbl { font-size: .75rem; color: var(--muted); }
-  .hidden { display: none !important; }
-
-  /* Modal */
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 300;
-    background: rgba(0,0,0,.55);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .2s;
-  }
-  .modal-backdrop.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  @media (min-width: 640px) {
-    .modal-backdrop { align-items: center; padding: 1.5rem; }
-  }
-  .modal {
-    width: 100%;
-    max-width: 440px;
-    max-height: min(85vh, 640px);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px 16px 0 0;
-    display: flex;
-    flex-direction: column;
-    transform: translateY(20px);
-    transition: transform .2s;
-  }
-  .modal-backdrop.open .modal { transform: translateY(0); }
-  @media (min-width: 640px) {
-    .modal { border-radius: 14px; }
-  }
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1.1rem;
+  .opt.selected .opt-letter { background: var(--accent); color: #fff; }
+  .opt.correct .opt-letter { background: var(--ok); color: #fff; }
+  .opt.wrong .opt-letter { background: var(--err); color: #fff; }
+  .opt-text { flex: 1; font-size: .86rem; white-space: pre-wrap; word-break: break-word; }
+  .q-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .85rem; align-items: center; }
+  .feedback { font-size: .85rem; font-weight: 600; }
+  .feedback.ok { color: var(--ok); }
+  .feedback.err { color: var(--err); }
+  .toolbar-sticky {
+    position: sticky; top: calc(var(--nav-h) + var(--safe-top)); z-index: 50;
+    background: #0f1419ee; backdrop-filter: blur(6px);
+    padding: .55rem 0; margin-bottom: .75rem;
     border-bottom: 1px solid var(--border);
   }
-  .modal-header h2 { margin: 0; font-size: 1rem; }
-  .modal-close {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    cursor: pointer;
-    font-size: 1.1rem;
-    line-height: 1;
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: .65rem; margin-bottom: 1rem;
   }
-  .modal-body {
-    overflow: auto;
-    padding: .75rem;
-    -webkit-overflow-scrolling: touch;
+  .stat {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: .75rem; text-align: center;
   }
-  .exam-option {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: .2rem;
-    text-align: left;
-    padding: .85rem .9rem;
-    margin-bottom: .45rem;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    cursor: pointer;
+  .stat .val { font-size: 1.4rem; font-weight: 800; }
+  .stat .lbl { font-size: .72rem; color: var(--muted); }
+  .theme-block { margin-bottom: 1.1rem; }
+  .theme-block h3 {
+    margin: 0 0 .55rem; font-size: .92rem;
+    padding: .4rem .55rem; border-left: 3px solid var(--accent);
+    background: linear-gradient(90deg, #243044aa, transparent);
   }
-  .exam-option:hover { border-color: var(--accent); }
-  .exam-option.active {
-    border-color: var(--accent);
-    box-shadow: inset 0 0 0 1px var(--accent);
+  .mini-q {
+    display: flex; flex-wrap: wrap; gap: .35rem .6rem; align-items: center;
+    padding: .45rem .55rem; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface); margin-bottom: .35rem; font-size: .8rem;
   }
-  .exam-option-title { font-weight: 600; font-size: .9rem; }
-  .exam-option-meta { font-size: .75rem; color: var(--muted); }
-  .exam-option-check {
-    font-size: .7rem;
-    font-weight: 700;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: .04em;
-  }
-
-  @media print {
-    .navbar, .modal-backdrop, .toolbar, .filter-bar, .hint { display: none !important; }
-    body { padding-top: 0; }
-    .q-card { break-inside: avoid; }
+  .mini-q.ok { border-color: #22c55e66; }
+  .mini-q.err { border-color: #ef444466; }
+  .empty { color: var(--muted); font-size: .9rem; padding: 1.5rem .5rem; text-align: center; }
+  .hidden { display: none !important; }
+  .img-banner {
+    display: flex; gap: .5rem; align-items: flex-start;
+    padding: .55rem .7rem; margin: 0 0 .75rem;
+    border-radius: 8px; border: 1px solid #f472b666;
+    background: #83184333; color: #fbcfe8; font-size: .8rem;
   }
 </style>
 </head>
 <body>
 <nav class="navbar" aria-label="Principal">
-  <div class="nav-brand" aria-hidden="true">
-    <span class="nav-brand-emoji">📝</span>
-    <span class="nav-brand-text">Gabarito FGV</span>
+  <div class="nav-brand">
+    <span class="nav-brand-emoji" aria-hidden="true">📝</span>
+    <span class="nav-brand-text">Prova FGV</span>
   </div>
-  <button type="button" class="nav-exam" id="btnOpenExamModal" aria-haspopup="dialog" aria-controls="examModal">
-    <span class="nav-exam-label">Prova selecionada</span>
-    <span class="nav-exam-title" id="navExamTitle">—</span>
-    <span class="nav-exam-meta" id="navExamMeta"></span>
-  </button>
-  <span class="nav-chevron" aria-hidden="true">▾</span>
+  <div class="nav-status" id="navStatus">Carregando…</div>
 </nav>
 
-<p class="hint">Leia o enunciado no PDF · Âmbar = guia específico · Ciano = guia geral (Módulo I) · Marque A–E · Verificar gabarito</p>
 <main id="main"></main>
 
-<div class="modal-backdrop" id="examModal" role="dialog" aria-modal="true" aria-labelledby="examModalTitle" hidden>
-  <div class="modal">
-    <div class="modal-header">
-      <h2 id="examModalTitle">Selecionar prova</h2>
-      <button type="button" class="modal-close" id="btnCloseExamModal" aria-label="Fechar">×</button>
-    </div>
-    <div class="modal-body" id="examModalList"></div>
-  </div>
-</div>
+<nav class="bottom-nav" aria-label="Navegação">
+  <button type="button" data-view="home" id="tabHome"><span class="ico">🏠</span>Início</button>
+  <button type="button" data-view="quiz" id="tabQuiz"><span class="ico">📋</span>Questões</button>
+  <button type="button" data-view="results" id="tabResults"><span class="ico">📊</span>Resultados</button>
+</nav>
 
+<script src="./data.js"></script>
+<script src="./app.js"></script>
 <script>
-const EXAMS = [{"id": "fortaleza2024", "title": "Fortaleza 2024 — Analista de Informática", "tipo": 1, "total": 70, "guideTotal": 26, "guideEspTotal": 11, "guideGeralTotal": 15, "sections": [{"title": "Língua Portuguesa", "start": 1, "end": 10}, {"title": "Raciocínio Lógico e Matemático", "start": 11, "end": 15}, {"title": "Regimento Interno da Câmara Municipal", "start": 16, "end": 25}, {"title": "Lei Orgânica Municipal", "start": 26, "end": 30}, {"title": "Conhecimentos Específicos", "start": 31, "end": 70}], "questions": [{"n": 1, "answer": "B", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q1)", "guideKind": "geral"}, {"n": 2, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q2)", "guideKind": "geral"}, {"n": 3, "answer": "D", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q3)", "guideKind": "geral"}, {"n": 4, "answer": "E", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q4)", "guideKind": "geral"}, {"n": 5, "answer": "D", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q5)", "guideKind": "geral"}, {"n": 6, "answer": "E", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q6)", "guideKind": "geral"}, {"n": 7, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q7)", "guideKind": "geral"}, {"n": 8, "answer": "E", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q8)", "guideKind": "geral"}, {"n": 9, "answer": "B", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q9)", "guideKind": "geral"}, {"n": 10, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q10)", "guideKind": "geral"}, {"n": 11, "answer": "E", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q11)", "guideKind": "geral"}, {"n": 12, "answer": "A", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q12)", "guideKind": "geral"}, {"n": 13, "answer": "D", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q13)", "guideKind": "geral"}, {"n": 14, "answer": "D", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q14)", "guideKind": "geral"}, {"n": 15, "answer": "B", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q15)", "guideKind": "geral"}, {"n": 16, "answer": "C", "guide": false}, {"n": 17, "answer": "E", "guide": false}, {"n": 18, "answer": "B", "guide": false}, {"n": 19, "answer": "A", "guide": false}, {"n": 20, "answer": "D", "guide": false}, {"n": 21, "answer": "B", "guide": false}, {"n": 22, "answer": "B", "guide": false}, {"n": 23, "answer": "C", "guide": false}, {"n": 24, "answer": "C", "guide": false}, {"n": 25, "answer": "B", "guide": false}, {"n": 26, "answer": "E", "guide": false}, {"n": 27, "answer": "B", "guide": false}, {"n": 28, "answer": "D", "guide": false}, {"n": 29, "answer": "A", "guide": false}, {"n": 30, "answer": "D", "guide": false}, {"n": 31, "answer": "D", "guide": true, "tags": "ENG", "topic": "Engenharia de software (Brooks / Bala de Prata)", "guideKind": "esp"}, {"n": 32, "answer": "D", "guide": true, "tags": "ENG", "topic": "Modelo em cascata", "guideKind": "esp"}, {"n": 33, "answer": "C", "guide": true, "tags": "ENG", "topic": "Requisitos funcionais e não funcionais", "guideKind": "esp"}, {"n": 34, "answer": "C", "guide": true, "tags": "AG", "topic": "Scrum (burndown / sprint)", "guideKind": "esp"}, {"n": 35, "answer": "C", "guide": true, "tags": "BPM/ENG", "topic": "Modelagem de processos (BPM) e UML", "guideKind": "esp"}, {"n": 36, "answer": "B", "guide": false}, {"n": 37, "answer": "A", "guide": false}, {"n": 38, "answer": "D", "guide": false}, {"n": 39, "answer": "B", "guide": false}, {"n": 40, "answer": "C", "guide": false}, {"n": 41, "answer": "E", "guide": false}, {"n": 42, "answer": "C", "guide": false}, {"n": 43, "answer": "E", "guide": true, "tags": "DAD", "topic": "DDL, DML, DQL", "guideKind": "esp"}, {"n": 44, "answer": "A", "guide": false}, {"n": 45, "answer": "B", "guide": false}, {"n": 46, "answer": "B", "guide": true, "tags": "BI", "topic": "Função do Data Warehouse", "guideKind": "esp"}, {"n": 47, "answer": "B", "guide": false}, {"n": 48, "answer": "B", "guide": false}, {"n": 49, "answer": "D", "guide": false}, {"n": 50, "answer": "E", "guide": false}, {"n": 51, "answer": "D", "guide": false}, {"n": 52, "answer": "A", "guide": false}, {"n": 53, "answer": "B", "guide": false}, {"n": 54, "answer": "B", "guide": false}, {"n": 55, "answer": "D", "guide": false}, {"n": 56, "answer": "B", "guide": false}, {"n": 57, "answer": "D", "guide": false}, {"n": 58, "answer": "A", "guide": false}, {"n": 59, "answer": "D", "guide": false}, {"n": 60, "answer": "B", "guide": false}, {"n": 61, "answer": "A", "guide": false}, {"n": 62, "answer": "A", "guide": false}, {"n": 63, "answer": "C", "guide": false}, {"n": 64, "answer": "A", "guide": false}, {"n": 65, "answer": "B", "guide": false}, {"n": 66, "answer": "C", "guide": false}, {"n": 67, "answer": "D", "guide": true, "tags": "COB", "topic": "COBIT 2019", "guideKind": "esp"}, {"n": 68, "answer": "D", "guide": true, "tags": "ITIL", "topic": "Incidentes, problemas e mudanças", "guideKind": "esp"}, {"n": 69, "answer": "D", "guide": true, "tags": "BPM", "topic": "CMMI", "guideKind": "esp"}, {"n": 70, "answer": "D", "guide": true, "tags": "AG", "topic": "PMBOK 7 — Domínios de Desempenho", "guideKind": "esp"}]}, {"id": "senado_sistemas2022", "title": "Senado 2022 — Análise de Sistemas", "tipo": 1, "total": 70, "guideTotal": 39, "guideEspTotal": 12, "guideGeralTotal": 27, "sections": [{"title": "Língua Portuguesa", "start": 1, "end": 10}, {"title": "Raciocínio Lógico Matemático", "start": 11, "end": 17}, {"title": "Língua Inglesa", "start": 18, "end": 24}, {"title": "Direito Constitucional", "start": 25, "end": 31}, {"title": "Direito Administrativo", "start": 32, "end": 40}, {"title": "Conhecimentos Específicos", "start": 41, "end": 70}], "questions": [{"n": 1, "answer": "E", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q1)", "guideKind": "geral"}, {"n": 2, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q2)", "guideKind": "geral"}, {"n": 3, "answer": null, "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q3)", "guideKind": "geral"}, {"n": 4, "answer": "A", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q4)", "guideKind": "geral"}, {"n": 5, "answer": "B", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q5)", "guideKind": "geral"}, {"n": 6, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q6)", "guideKind": "geral"}, {"n": 7, "answer": "D", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q7)", "guideKind": "geral"}, {"n": 8, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q8)", "guideKind": "geral"}, {"n": 9, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q9)", "guideKind": "geral"}, {"n": 10, "answer": "D", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q10)", "guideKind": "geral"}, {"n": 11, "answer": null, "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q11)", "guideKind": "geral"}, {"n": 12, "answer": "B", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q12)", "guideKind": "geral"}, {"n": 13, "answer": "D", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q13)", "guideKind": "geral"}, {"n": 14, "answer": "C", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q14)", "guideKind": "geral"}, {"n": 15, "answer": "A", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q15)", "guideKind": "geral"}, {"n": 16, "answer": "E", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q16)", "guideKind": "geral"}, {"n": 17, "answer": "D", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q17)", "guideKind": "geral"}, {"n": 18, "answer": "B", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q18)", "guideKind": "geral"}, {"n": 19, "answer": "C", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q19)", "guideKind": "geral"}, {"n": 20, "answer": "D", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q20)", "guideKind": "geral"}, {"n": 21, "answer": "A", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q21)", "guideKind": "geral"}, {"n": 22, "answer": "E", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q22)", "guideKind": "geral"}, {"n": 23, "answer": "A", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q23)", "guideKind": "geral"}, {"n": 24, "answer": "D", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q24)", "guideKind": "geral"}, {"n": 25, "answer": null, "guide": false}, {"n": 26, "answer": "B", "guide": false}, {"n": 27, "answer": "A", "guide": false}, {"n": 28, "answer": "C", "guide": false}, {"n": 29, "answer": "D", "guide": false}, {"n": 30, "answer": "C", "guide": false}, {"n": 31, "answer": "E", "guide": false}, {"n": 32, "answer": "C", "guide": false}, {"n": 33, "answer": "B", "guide": false}, {"n": 34, "answer": "A", "guide": false}, {"n": 35, "answer": "A", "guide": false}, {"n": 36, "answer": "B", "guide": false}, {"n": 37, "answer": "D", "guide": false}, {"n": 38, "answer": "B", "guide": true, "tags": "LEG", "topic": "Lei de Acesso à Informação (Lei 12.527/2011)", "guideKind": "geral"}, {"n": 39, "answer": "E", "guide": false}, {"n": 40, "answer": "E", "guide": false}, {"n": 41, "answer": "D", "guide": true, "tags": "AN/AG", "topic": "Valor de negócio / PMO (PMBOK)", "guideKind": "esp"}, {"n": 42, "answer": "B", "guide": true, "tags": "AG", "topic": "Liderança vs. gerenciamento do GP", "guideKind": "esp"}, {"n": 43, "answer": null, "guide": true, "tags": "ITIL", "topic": "Adoção de boas práticas ITIL", "guideKind": "esp"}, {"n": 44, "answer": "E", "guide": true, "tags": "ITIL", "topic": "Melhoria Contínua do Serviço", "guideKind": "esp"}, {"n": 45, "answer": "A", "guide": true, "tags": "ITIL", "topic": "Gerenciamento de Problemas", "guideKind": "esp"}, {"n": 46, "answer": null, "guide": true, "tags": "AG", "topic": "Scrum (burndown/burnup)", "guideKind": "esp"}, {"n": 47, "answer": null, "guide": true, "tags": "ENG", "topic": "Princípios SOLID", "guideKind": "esp"}, {"n": 48, "answer": "E", "guide": false}, {"n": 49, "answer": "A", "guide": true, "tags": "ENG", "topic": "TDD", "guideKind": "esp"}, {"n": 50, "answer": "B", "guide": true, "tags": "ENG", "topic": "Diagramas de estrutura UML", "guideKind": "esp"}, {"n": 51, "answer": "D", "guide": false}, {"n": 52, "answer": "E", "guide": false}, {"n": 53, "answer": "B", "guide": false}, {"n": 54, "answer": null, "guide": true, "tags": "DAD", "topic": "Particionamento em SGBD", "guideKind": "esp"}, {"n": 55, "answer": null, "guide": true, "tags": "DAD", "topic": "Indicadores de desempenho do BD", "guideKind": "esp"}, {"n": 56, "answer": null, "guide": false}, {"n": 57, "answer": "E", "guide": false}, {"n": 58, "answer": "D", "guide": false}, {"n": 59, "answer": null, "guide": false}, {"n": 60, "answer": "A", "guide": false}, {"n": 61, "answer": null, "guide": false}, {"n": 62, "answer": null, "guide": false}, {"n": 63, "answer": "B", "guide": false}, {"n": 64, "answer": "D", "guide": false}, {"n": 65, "answer": "B", "guide": false}, {"n": 66, "answer": "D", "guide": false}, {"n": 67, "answer": "B", "guide": true, "tags": "LEG", "topic": "Marco Civil da Internet (Lei 12.965/2014)", "guideKind": "geral"}, {"n": 68, "answer": "E", "guide": true, "tags": "LEG", "topic": "LGPD — princípios (Lei 13.709/2018)", "guideKind": "geral"}, {"n": 69, "answer": "A", "guide": false}, {"n": 70, "answer": "D", "guide": true, "tags": "IA", "topic": "Inteligência Artificial (deepfake) — também útil a Atualidades e IA", "guideKind": "esp"}]}, {"id": "senado_suporte2022", "title": "Senado 2022 — Análise de Suporte", "tipo": 1, "total": 70, "guideTotal": 34, "guideEspTotal": 7, "guideGeralTotal": 27, "sections": [{"title": "Língua Portuguesa", "start": 1, "end": 10}, {"title": "Raciocínio Lógico Matemático", "start": 11, "end": 17}, {"title": "Língua Inglesa", "start": 18, "end": 24}, {"title": "Direito Constitucional", "start": 25, "end": 31}, {"title": "Direito Administrativo", "start": 32, "end": 40}, {"title": "Conhecimentos Específicos", "start": 41, "end": 70}], "questions": [{"n": 1, "answer": "E", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q1)", "guideKind": "geral"}, {"n": 2, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q2)", "guideKind": "geral"}, {"n": 3, "answer": null, "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q3)", "guideKind": "geral"}, {"n": 4, "answer": "A", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q4)", "guideKind": "geral"}, {"n": 5, "answer": "B", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q5)", "guideKind": "geral"}, {"n": 6, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q6)", "guideKind": "geral"}, {"n": 7, "answer": "D", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q7)", "guideKind": "geral"}, {"n": 8, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q8)", "guideKind": "geral"}, {"n": 9, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q9)", "guideKind": "geral"}, {"n": 10, "answer": "D", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q10)", "guideKind": "geral"}, {"n": 11, "answer": null, "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q11)", "guideKind": "geral"}, {"n": 12, "answer": "B", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q12)", "guideKind": "geral"}, {"n": 13, "answer": "D", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q13)", "guideKind": "geral"}, {"n": 14, "answer": "C", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q14)", "guideKind": "geral"}, {"n": 15, "answer": "A", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q15)", "guideKind": "geral"}, {"n": 16, "answer": "E", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q16)", "guideKind": "geral"}, {"n": 17, "answer": "D", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q17)", "guideKind": "geral"}, {"n": 18, "answer": "B", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q18)", "guideKind": "geral"}, {"n": 19, "answer": "C", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q19)", "guideKind": "geral"}, {"n": 20, "answer": "D", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q20)", "guideKind": "geral"}, {"n": 21, "answer": "A", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q21)", "guideKind": "geral"}, {"n": 22, "answer": "E", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q22)", "guideKind": "geral"}, {"n": 23, "answer": "A", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q23)", "guideKind": "geral"}, {"n": 24, "answer": "D", "guide": true, "tags": "ING", "topic": "Língua Inglesa (Q24)", "guideKind": "geral"}, {"n": 25, "answer": null, "guide": false}, {"n": 26, "answer": "B", "guide": false}, {"n": 27, "answer": "A", "guide": false}, {"n": 28, "answer": "C", "guide": false}, {"n": 29, "answer": "D", "guide": false}, {"n": 30, "answer": "C", "guide": false}, {"n": 31, "answer": "E", "guide": false}, {"n": 32, "answer": "C", "guide": false}, {"n": 33, "answer": "B", "guide": false}, {"n": 34, "answer": "A", "guide": false}, {"n": 35, "answer": "A", "guide": false}, {"n": 36, "answer": "B", "guide": false}, {"n": 37, "answer": "D", "guide": false}, {"n": 38, "answer": "B", "guide": true, "tags": "LEG", "topic": "Lei de Acesso à Informação (Lei 12.527/2011)", "guideKind": "geral"}, {"n": 39, "answer": "E", "guide": false}, {"n": 40, "answer": "E", "guide": false}, {"n": 41, "answer": "D", "guide": true, "tags": "AN/AG", "topic": "Valor de negócio / PMO (PMBOK)", "guideKind": "esp"}, {"n": 42, "answer": "B", "guide": true, "tags": "AG", "topic": "Comportamento do Gerente de Projetos", "guideKind": "esp"}, {"n": 43, "answer": "E", "guide": true, "tags": "ITIL", "topic": "Melhoria Contínua do Serviço", "guideKind": "esp"}, {"n": 44, "answer": "A", "guide": true, "tags": "ITIL", "topic": "Gerenciamento de Problemas", "guideKind": "esp"}, {"n": 45, "answer": "D", "guide": false}, {"n": 46, "answer": "D", "guide": false}, {"n": 47, "answer": "B", "guide": false}, {"n": 48, "answer": "E", "guide": false}, {"n": 49, "answer": null, "guide": false}, {"n": 50, "answer": "A", "guide": false}, {"n": 51, "answer": "D", "guide": false}, {"n": 52, "answer": null, "guide": false}, {"n": 53, "answer": "C", "guide": false}, {"n": 54, "answer": "D", "guide": false}, {"n": 55, "answer": "E", "guide": false}, {"n": 56, "answer": "D", "guide": false}, {"n": 57, "answer": "A", "guide": false}, {"n": 58, "answer": "C", "guide": false}, {"n": 59, "answer": "C", "guide": false}, {"n": 60, "answer": "E", "guide": false}, {"n": 61, "answer": "B", "guide": false}, {"n": 62, "answer": "D", "guide": false}, {"n": 63, "answer": "C", "guide": false}, {"n": 64, "answer": "D", "guide": false}, {"n": 65, "answer": "C", "guide": true, "tags": "DAD", "topic": "Particionamento em SGBD", "guideKind": "esp"}, {"n": 66, "answer": "E", "guide": true, "tags": "DAD", "topic": "Indicadores de desempenho do BD", "guideKind": "esp"}, {"n": 67, "answer": "B", "guide": true, "tags": "LEG", "topic": "Marco Civil da Internet (Lei 12.965/2014)", "guideKind": "geral"}, {"n": 68, "answer": "E", "guide": true, "tags": "LEG", "topic": "LGPD — princípios (Lei 13.709/2018)", "guideKind": "geral"}, {"n": 69, "answer": "A", "guide": false}, {"n": 70, "answer": "D", "guide": true, "tags": "IA", "topic": "Inteligência Artificial (deepfake) — também útil a Atualidades e IA", "guideKind": "esp"}]}, {"id": "camara2023", "title": "Câmara 2023 — Informática Legislativa", "tipo": 1, "total": 70, "guideTotal": 19, "guideEspTotal": 19, "guideGeralTotal": 0, "sections": [{"title": "Conhecimentos Específicos", "start": 1, "end": 70}], "questions": [{"n": 1, "answer": "E", "guide": false}, {"n": 2, "answer": "B", "guide": false}, {"n": 3, "answer": "D", "guide": false}, {"n": 4, "answer": "C", "guide": false}, {"n": 5, "answer": "A", "guide": false}, {"n": 6, "answer": "C", "guide": true, "tags": "DAD", "topic": "Comandos SQL", "guideKind": "esp"}, {"n": 7, "answer": "A", "guide": true, "tags": "DAD", "topic": "SQL — correção de dados", "guideKind": "esp"}, {"n": 8, "answer": "D", "guide": true, "tags": "DAD", "topic": "SQL — alterações em tabela", "guideKind": "esp"}, {"n": 9, "answer": "C", "guide": false}, {"n": 10, "answer": "E", "guide": false}, {"n": 11, "answer": "D", "guide": false}, {"n": 12, "answer": "B", "guide": false}, {"n": 13, "answer": "A", "guide": true, "tags": "DAD", "topic": "NoSQL e índices", "guideKind": "esp"}, {"n": 14, "answer": "B", "guide": true, "tags": "BI", "topic": "ETL", "guideKind": "esp"}, {"n": 15, "answer": "C", "guide": false}, {"n": 16, "answer": "D", "guide": false}, {"n": 17, "answer": "B", "guide": true, "tags": "ENG", "topic": "Padrões GRASP", "guideKind": "esp"}, {"n": 18, "answer": "A", "guide": false}, {"n": 19, "answer": "E", "guide": false}, {"n": 20, "answer": "D", "guide": false}, {"n": 21, "answer": "A", "guide": false}, {"n": 22, "answer": "C", "guide": false}, {"n": 23, "answer": "D", "guide": false}, {"n": 24, "answer": "E", "guide": false}, {"n": 25, "answer": "C", "guide": false}, {"n": 26, "answer": "E", "guide": true, "tags": "AG", "topic": "Estimativa três pontos (PMBOK)", "guideKind": "esp"}, {"n": 27, "answer": "C", "guide": true, "tags": "COB", "topic": "COBIT 2019", "guideKind": "esp"}, {"n": 28, "answer": "A", "guide": false}, {"n": 29, "answer": "D", "guide": false}, {"n": 30, "answer": "C", "guide": false}, {"n": 31, "answer": "E", "guide": false}, {"n": 32, "answer": "B", "guide": false}, {"n": 33, "answer": "A", "guide": false}, {"n": 34, "answer": "D", "guide": true, "tags": "UX", "topic": "WCAG 2.1", "guideKind": "esp"}, {"n": 35, "answer": "C", "guide": true, "tags": "UX", "topic": "Design UX/UI", "guideKind": "esp"}, {"n": 36, "answer": "D", "guide": true, "tags": "IA", "topic": "Aprendizado de máquina — também útil a Atualidades e IA", "guideKind": "esp"}, {"n": 37, "answer": "D", "guide": true, "tags": "IA", "topic": "Inteligência artificial — também útil a Atualidades e IA", "guideKind": "esp"}, {"n": 38, "answer": "A", "guide": true, "tags": "IA", "topic": "Redes neurais — também útil a Atualidades e IA", "guideKind": "esp"}, {"n": 39, "answer": "D", "guide": false}, {"n": 40, "answer": "C", "guide": false}, {"n": 41, "answer": "E", "guide": true, "tags": "IA", "topic": "NLTK / PLN — também útil a Atualidades e IA", "guideKind": "esp"}, {"n": 42, "answer": "B", "guide": true, "tags": "IA", "topic": "TensorFlow/Keras — também útil a Atualidades e IA", "guideKind": "esp"}, {"n": 43, "answer": "B", "guide": false}, {"n": 44, "answer": "D", "guide": false}, {"n": 45, "answer": "E", "guide": false}, {"n": 46, "answer": "A", "guide": true, "tags": "DAD", "topic": "MS SQL Server", "guideKind": "esp"}, {"n": 47, "answer": "C", "guide": false}, {"n": 48, "answer": "D", "guide": false}, {"n": 49, "answer": "A", "guide": true, "tags": "DAD", "topic": "NoSQL / escalabilidade", "guideKind": "esp"}, {"n": 50, "answer": "E", "guide": true, "tags": "DAD", "topic": "Integridade referencial", "guideKind": "esp"}, {"n": 51, "answer": "B", "guide": false}, {"n": 52, "answer": "E", "guide": false}, {"n": 53, "answer": "C", "guide": false}, {"n": 54, "answer": "A", "guide": false}, {"n": 55, "answer": "D", "guide": false}, {"n": 56, "answer": "B", "guide": false}, {"n": 57, "answer": "A", "guide": false}, {"n": 58, "answer": "D", "guide": false}, {"n": 59, "answer": "B", "guide": false}, {"n": 60, "answer": "D", "guide": false}, {"n": 61, "answer": "E", "guide": false}, {"n": 62, "answer": "A", "guide": false}, {"n": 63, "answer": "C", "guide": false}, {"n": 64, "answer": "B", "guide": false}, {"n": 65, "answer": "D", "guide": false}, {"n": 66, "answer": "E", "guide": false}, {"n": 67, "answer": "A", "guide": false}, {"n": 68, "answer": "B", "guide": false}, {"n": 69, "answer": "D", "guide": true, "tags": "DAD", "topic": "SQL Injection", "guideKind": "esp"}, {"n": 70, "answer": "A", "guide": false}]}, {"id": "tcepa2024", "title": "TCE-PA 2024 — Analista de Segurança", "tipo": 1, "total": 100, "guideTotal": 31, "guideEspTotal": 10, "guideGeralTotal": 21, "sections": [{"title": "Língua Portuguesa", "start": 1, "end": 10}, {"title": "Raciocínio Lógico", "start": 11, "end": 20}, {"title": "Legislação Específica", "start": 21, "end": 25}, {"title": "História, Geografia e Conhecimentos do Pará", "start": 26, "end": 30}, {"title": "Específicos Básicos (Governança / TI)", "start": 31, "end": 40}, {"title": "Noções de Segurança da Informação", "start": 41, "end": 60}, {"title": "Específicos Avançados", "start": 61, "end": 100}], "questions": [{"n": 1, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q1)", "guideKind": "geral"}, {"n": 2, "answer": "B", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q2)", "guideKind": "geral"}, {"n": 3, "answer": "E", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q3)", "guideKind": "geral"}, {"n": 4, "answer": "B", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q4)", "guideKind": "geral"}, {"n": 5, "answer": "A", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q5)", "guideKind": "geral"}, {"n": 6, "answer": "E", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q6)", "guideKind": "geral"}, {"n": 7, "answer": "C", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q7)", "guideKind": "geral"}, {"n": 8, "answer": "A", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q8)", "guideKind": "geral"}, {"n": 9, "answer": "D", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q9)", "guideKind": "geral"}, {"n": 10, "answer": "B", "guide": true, "tags": "PORT", "topic": "Língua Portuguesa (Q10)", "guideKind": "geral"}, {"n": 11, "answer": "E", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q11)", "guideKind": "geral"}, {"n": 12, "answer": "E", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q12)", "guideKind": "geral"}, {"n": 13, "answer": "D", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q13)", "guideKind": "geral"}, {"n": 14, "answer": "B", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q14)", "guideKind": "geral"}, {"n": 15, "answer": "B", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q15)", "guideKind": "geral"}, {"n": 16, "answer": "A", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q16)", "guideKind": "geral"}, {"n": 17, "answer": "B", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q17)", "guideKind": "geral"}, {"n": 18, "answer": "A", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q18)", "guideKind": "geral"}, {"n": 19, "answer": "C", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q19)", "guideKind": "geral"}, {"n": 20, "answer": "E", "guide": true, "tags": "RLM", "topic": "Raciocínio Lógico Matemático (Q20)", "guideKind": "geral"}, {"n": 21, "answer": "A", "guide": false}, {"n": 22, "answer": "C", "guide": false}, {"n": 23, "answer": "D", "guide": false}, {"n": 24, "answer": "C", "guide": false}, {"n": 25, "answer": "C", "guide": false}, {"n": 26, "answer": "C", "guide": false}, {"n": 27, "answer": "C", "guide": false}, {"n": 28, "answer": "A", "guide": false}, {"n": 29, "answer": "E", "guide": false}, {"n": 30, "answer": "D", "guide": false}, {"n": 31, "answer": "B", "guide": false}, {"n": 32, "answer": "C", "guide": true, "tags": "COB", "topic": "COBIT 2019", "guideKind": "esp"}, {"n": 33, "answer": "B", "guide": false}, {"n": 34, "answer": "D", "guide": true, "tags": "IND", "topic": "Balanced Scorecard", "guideKind": "esp"}, {"n": 35, "answer": "C", "guide": true, "tags": "AG", "topic": "PMBOK 7 — Domínios de Desempenho", "guideKind": "esp"}, {"n": 36, "answer": "B", "guide": true, "tags": "BPM", "topic": "BPM, BPMN e BPMS", "guideKind": "esp"}, {"n": 37, "answer": "D", "guide": true, "tags": "ITIL", "topic": "ANS/ITIL em licitações TIC", "guideKind": "esp"}, {"n": 38, "answer": "C", "guide": true, "tags": "CON", "topic": "Gestão de contratos TIC", "guideKind": "esp"}, {"n": 39, "answer": "C", "guide": true, "tags": "CON", "topic": "Contrato de eficiência", "guideKind": "esp"}, {"n": 40, "answer": "D", "guide": false}, {"n": 41, "answer": "A", "guide": false}, {"n": 42, "answer": "A", "guide": false}, {"n": 43, "answer": "C", "guide": false}, {"n": 44, "answer": "C", "guide": false}, {"n": 45, "answer": "C", "guide": false}, {"n": 46, "answer": "B", "guide": false}, {"n": 47, "answer": "C", "guide": false}, {"n": 48, "answer": "E", "guide": false}, {"n": 49, "answer": "B", "guide": false}, {"n": 50, "answer": "D", "guide": true, "tags": "LEG", "topic": "Lei de Acesso à Informação (Lei 12.527/2011)", "guideKind": "geral"}, {"n": 51, "answer": "E", "guide": false}, {"n": 52, "answer": "B", "guide": true, "tags": "DAD", "topic": "Consultas SQL", "guideKind": "esp"}, {"n": 53, "answer": "A", "guide": true, "tags": "DAD", "topic": "Modelagem / integridade temporal", "guideKind": "esp"}, {"n": 54, "answer": "D", "guide": true, "tags": "DAD", "topic": "SQL — substituição de responsável", "guideKind": "esp"}, {"n": 55, "answer": "A", "guide": false}, {"n": 56, "answer": "B", "guide": false}, {"n": 57, "answer": "C", "guide": false}, {"n": 58, "answer": "B", "guide": false}, {"n": 59, "answer": "C", "guide": false}, {"n": 60, "answer": "D", "guide": false}, {"n": 61, "answer": "E", "guide": false}, {"n": 62, "answer": "E", "guide": false}, {"n": 63, "answer": "D", "guide": false}, {"n": 64, "answer": "C", "guide": false}, {"n": 65, "answer": "D", "guide": false}, {"n": 66, "answer": "D", "guide": false}, {"n": 67, "answer": "E", "guide": false}, {"n": 68, "answer": "A", "guide": false}, {"n": 69, "answer": "C", "guide": false}, {"n": 70, "answer": "D", "guide": false}, {"n": 71, "answer": "E", "guide": false}, {"n": 72, "answer": "C", "guide": false}, {"n": 73, "answer": "C", "guide": false}, {"n": 74, "answer": "C", "guide": false}, {"n": 75, "answer": "D", "guide": false}, {"n": 76, "answer": "C", "guide": false}, {"n": 77, "answer": "D", "guide": false}, {"n": 78, "answer": "E", "guide": false}, {"n": 79, "answer": "B", "guide": false}, {"n": 80, "answer": "E", "guide": false}, {"n": 81, "answer": "B", "guide": false}, {"n": 82, "answer": "B", "guide": false}, {"n": 83, "answer": "C", "guide": false}, {"n": 84, "answer": "B", "guide": false}, {"n": 85, "answer": "E", "guide": false}, {"n": 86, "answer": "C", "guide": false}, {"n": 87, "answer": "E", "guide": false}, {"n": 88, "answer": "E", "guide": false}, {"n": 89, "answer": "D", "guide": false}, {"n": 90, "answer": "D", "guide": false}, {"n": 91, "answer": "B", "guide": false}, {"n": 92, "answer": "B", "guide": false}, {"n": 93, "answer": "E", "guide": false}, {"n": 94, "answer": "D", "guide": false}, {"n": 95, "answer": "A", "guide": false}, {"n": 96, "answer": "B", "guide": false}, {"n": 97, "answer": "E", "guide": false}, {"n": 98, "answer": "E", "guide": false}, {"n": 99, "answer": "C", "guide": false}, {"n": 100, "answer": "D", "guide": false}]}];
-
-let currentExam = localStorage.getItem('gabarito_dataprev_current') || EXAMS[0]?.id || '';
-if (!EXAMS.some(e => e.id === currentExam)) currentExam = EXAMS[0]?.id || '';
-let checked = false;
-
-function storageKey(examId) {
-  return 'gabarito_dataprev_' + examId;
-}
-
-function loadAnswers(examId) {
-  try { return JSON.parse(localStorage.getItem(storageKey(examId)) || '{}'); }
-  catch { return {}; }
-}
-
-function saveAnswer(examId, qn, letter) {
-  const data = loadAnswers(examId);
-  data[qn] = letter;
-  localStorage.setItem(storageKey(examId), JSON.stringify(data));
-}
-
-function clearExam(examId) {
-  localStorage.removeItem(storageKey(examId));
-}
-
-function examById(id) { return EXAMS.find(e => e.id === id); }
-
-function updateNavbar() {
-  const exam = examById(currentExam);
-  const titleEl = document.getElementById('navExamTitle');
-  const metaEl = document.getElementById('navExamMeta');
-  if (!exam) {
-    titleEl.textContent = 'Nenhuma prova';
-    metaEl.textContent = '';
-    return;
-  }
-  titleEl.textContent = exam.title;
-  metaEl.textContent = `Tipo ${exam.tipo} · ${exam.total} questões`;
-}
-
-function openExamModal() {
-  const backdrop = document.getElementById('examModal');
-  const list = document.getElementById('examModalList');
-  list.innerHTML = EXAMS.map(e => `
-    <button type="button" class="exam-option${e.id === currentExam ? ' active' : ''}" data-id="${e.id}">
-      ${e.id === currentExam ? '<span class="exam-option-check">Selecionada</span>' : ''}
-      <span class="exam-option-title">${esc(e.title)}</span>
-      <span class="exam-option-meta">Tipo ${e.tipo} · ${e.total} questões</span>
-    </button>
-  `).join('');
-  list.querySelectorAll('.exam-option').forEach(btn => {
-    btn.addEventListener('click', () => selectExam(btn.dataset.id));
-  });
-  backdrop.hidden = false;
-  requestAnimationFrame(() => backdrop.classList.add('open'));
-  document.getElementById('btnCloseExamModal').focus();
-}
-
-function closeExamModal() {
-  const backdrop = document.getElementById('examModal');
-  backdrop.classList.remove('open');
-  setTimeout(() => { backdrop.hidden = true; }, 200);
-}
-
-function selectExam(id) {
-  if (id === currentExam) { closeExamModal(); return; }
-  currentExam = id;
-  localStorage.setItem('gabarito_dataprev_current', id);
-  checked = false;
-  updateNavbar();
-  closeExamModal();
-  renderExam();
-}
-
-function sectionForQuestion(exam, n) {
-  return (exam.sections || []).find(s => n >= s.start && n <= s.end) || null;
-}
-
-function guideKindOf(q) {
-  return q.guideKind || (q.guide ? 'esp' : null);
-}
-
-function guideAnsweredCount(exam, answers, kind) {
-  return exam.questions.filter(q => {
-    if (!q.guide || !answers[q.n]) return false;
-    if (!kind) return true;
-    return guideKindOf(q) === kind;
-  }).length;
-}
-
-function renderExam() {
-  const exam = examById(currentExam);
-  if (!exam) return;
-  updateNavbar();
-  const answers = loadAnswers(currentExam);
-  const answered = exam.questions.filter(q => answers[q.n]).length;
-  const gEsp = guideAnsweredCount(exam, answers, 'esp');
-  const gGer = guideAnsweredCount(exam, answers, 'geral');
-
-  document.getElementById('main').innerHTML = `
-    <div class="guide-legend">
-      <span><span class="guide-swatch esp"></span><span class="lbl-esp">Específico</span> — Módulo II / checklist TI</span>
-      <span><span class="guide-swatch geral"></span><span class="lbl-geral">Geral</span> — Módulo I (Port/Inglês/RLM/LEG)</span>
-      <span>Esp: <strong id="guideEspStats" class="lbl-esp">${gEsp}/${exam.guideEspTotal || 0}</strong></span>
-      <span>Geral: <strong id="guideGeralStats" class="lbl-geral">${gGer}/${exam.guideGeralTotal || 0}</strong></span>
-    </div>
-    <div class="toolbar">
-      <button class="btn-primary" id="btnCheck">Verificar gabarito</button>
-      <button class="btn-secondary" id="btnReset">Limpar respostas</button>
-      <button class="btn-secondary" id="btnHide">Ocultar resultado</button>
-      <div class="stats">${answered}/${exam.total} marcadas</div>
-    </div>
-    <div class="summary-panel" id="summary"></div>
-    <div class="filter-bar">
-      <input type="search" id="searchQ" placeholder="Filtrar por número da questão…">
-      <label style="font-size:.8rem;color:var(--muted)">
-        <input type="checkbox" id="onlyMarked"> Só marcadas
-      </label>
-      <label style="font-size:.8rem;color:var(--warn);font-weight:600">
-        <input type="checkbox" id="onlyGuideEsp"> Só guia específico
-      </label>
-      <label style="font-size:.8rem;color:var(--geral);font-weight:600">
-        <input type="checkbox" id="onlyGuideGeral"> Só guia geral
-      </label>
-    </div>
-    <div id="questions"></div>
-  `;
-
-  renderQuestions(exam, answers);
-
-  document.getElementById('btnCheck').onclick = () => { checked = true; renderQuestions(exam, loadAnswers(currentExam)); showSummary(exam); };
-  document.getElementById('btnReset').onclick = () => {
-    if (confirm('Limpar todas as respostas desta prova?')) {
-      clearExam(currentExam); checked = false; renderExam();
-    }
-  };
-  document.getElementById('btnHide').onclick = () => {
-    checked = false;
-    document.getElementById('summary').classList.remove('visible');
-    renderQuestions(exam, loadAnswers(currentExam));
-  };
-  document.getElementById('searchQ').oninput = filterQuestions;
-  document.getElementById('onlyMarked').onchange = filterQuestions;
-  document.getElementById('onlyGuideEsp').onchange = filterQuestions;
-  document.getElementById('onlyGuideGeral').onchange = filterQuestions;
-}
-
-function showSummary(exam) {
-  const answers = loadAnswers(currentExam);
-  let acertos = 0, erros = 0, brancos = 0, anuladas = 0;
-  let gOk = 0, gErr = 0, gBlank = 0;
-  exam.questions.forEach(q => {
-    const pick = answers[q.n];
-    if (q.answer === null) { anuladas++; return; }
-    if (!pick) {
-      brancos++;
-      if (q.guide) gBlank++;
-      return;
-    }
-    if (pick === q.answer) { acertos++; if (q.guide) gOk++; }
-    else { erros++; if (q.guide) gErr++; }
-  });
-  const valid = exam.questions.filter(q => q.answer).length;
-  const panel = document.getElementById('summary');
-  panel.classList.add('visible');
-  panel.innerHTML = `
-    <h3>Resultado</h3>
-    <div class="summary-grid">
-      <div class="summary-item"><div class="val" style="color:var(--ok)">${acertos}</div><div class="lbl">Acertos</div></div>
-      <div class="summary-item"><div class="val" style="color:var(--err)">${erros}</div><div class="lbl">Erros</div></div>
-      <div class="summary-item"><div class="val" style="color:var(--warn)">${brancos}</div><div class="lbl">Não marcadas</div></div>
-      <div class="summary-item"><div class="val" style="color:var(--anul)">${anuladas}</div><div class="lbl">Anuladas</div></div>
-      <div class="summary-item"><div class="val">${valid ? Math.round(acertos/valid*100) : 0}%</div><div class="lbl">Aproveitamento*</div></div>
-    </div>
-    <p style="font-size:.8rem;color:var(--muted);margin:.85rem 0 0">
-      Questões-guia: <span style="color:var(--ok)">${gOk} ok</span> ·
-      <span style="color:var(--err)">${gErr} erro</span> ·
-      <span style="color:var(--warn)">${gBlank} em branco</span>
-      (de ${exam.guideTotal || 0})
-    </p>
-    <p style="font-size:.75rem;color:var(--muted);margin:.35rem 0 0">* Desconsidera questões anuladas no cálculo.</p>
-  `;
-}
-
-function renderQuestions(exam, answers) {
-  const container = document.getElementById('questions');
-  if (!container) return;
-
-  const bySection = new Map();
-  const sections = exam.sections && exam.sections.length
-    ? exam.sections
-    : [{ title: 'Questões', start: 1, end: 999 }];
-  sections.forEach(s => bySection.set(s.title + '|' + s.start, { section: s, qs: [] }));
-  const orphan = { section: { title: 'Outras', start: 0, end: 0 }, qs: [] };
-
-  exam.questions.forEach(q => {
-    const sec = sectionForQuestion(exam, q.n);
-    if (!sec) { orphan.qs.push(q); return; }
-    const key = sec.title + '|' + sec.start;
-    bySection.get(key).qs.push(q);
-  });
-
-  const blocks = [...bySection.values()];
-  if (orphan.qs.length) blocks.push(orphan);
-
-  const renderCard = (q) => {
-    const pick = answers[q.n];
-    const kind = guideKindOf(q);
-    let cardClass = kind ? `guide-${kind}` : '';
-    let badge = '';
-    let feedbackHtml = '';
-
-    if (kind === 'esp') {
-      badge = `<span class="result-badge badge-guide-esp">ESP${q.tags ? ' · ' + esc(q.tags) : ''}</span>`;
-    } else if (kind === 'geral') {
-      badge = `<span class="result-badge badge-guide-geral">GERAL${q.tags ? ' · ' + esc(q.tags) : ''}</span>`;
-    }
-
-    if (checked) {
-      if (q.answer === null) {
-        cardClass += ' checked-anul';
-        badge += ' <span class="result-badge badge-anul">ANULADA</span>';
-        feedbackHtml = 'Questão anulada no gabarito oficial.';
-      } else if (!pick) {
-        cardClass += ' checked-blank';
-        badge += ' <span class="result-badge badge-blank">EM BRANCO</span>';
-        feedbackHtml = `Correta: <strong>${q.answer}</strong>`;
-      } else if (pick === q.answer) {
-        cardClass += ' checked-ok';
-        badge += ' <span class="result-badge badge-ok">OK</span>';
-      } else {
-        cardClass += ' checked-err';
-        badge += ' <span class="result-badge badge-err">ERRO</span>';
-        feedbackHtml = `Você: <strong>${pick}</strong> · Correta: <strong>${q.answer}</strong>`;
-      }
-    }
-
-    const opts = ['A','B','C','D','E'].map(letter => {
-      let cls = 'opt';
-      if (checked && q.answer && letter === q.answer) cls += ' correct';
-      if (checked && pick && pick !== q.answer && letter === q.answer) cls += ' correct-hint';
-      if (checked && pick === letter && letter !== q.answer) cls += ' wrong-pick';
-      return `<label class="${cls}">
-        <input type="radio" name="q${q.n}" value="${letter}" ${pick===letter?'checked':''} ${checked?'disabled':''}>
-        <span>${letter}</span>
-      </label>`;
-    }).join('');
-
-    const topic = kind && q.topic
-      ? `<div class="guide-topic"><em class="${kind}">${esc(q.tags || kind.toUpperCase())}</em> — ${esc(q.topic)}</div>`
-      : '';
-
-    return `<article class="q-card ${cardClass}" data-n="${q.n}" data-guide="${q.guide ? '1' : '0'}" data-guide-kind="${kind || ''}">
-      <span class="q-num">${q.n}</span>
-      <div class="q-meta">${badge}${feedbackHtml ? `<span class="feedback">${feedbackHtml}</span>` : ''}</div>
-      <div class="options">${opts}</div>
-      ${topic}
-    </article>`;
-  };
-
-  container.innerHTML = blocks.map(({ section, qs }) => {
-    if (!qs.length) return '';
-    const guideEsp = qs.filter(q => guideKindOf(q) === 'esp').length;
-    const guideGer = qs.filter(q => guideKindOf(q) === 'geral').length;
-    const bits = [];
-    if (guideEsp) bits.push(`${guideEsp} esp`);
-    if (guideGer) bits.push(`${guideGer} geral`);
-    return `<section class="section-block" data-section="${esc(section.title)}">
-      <div class="section-head">
-        <h3>${esc(section.title)}</h3>
-        <span class="sec-range">Q${section.start}–${section.end}${bits.length ? ' · ' + bits.join(' · ') : ''}</span>
-      </div>
-      ${qs.map(renderCard).join('')}
-    </section>`;
-  }).join('');
-
-  container.querySelectorAll('input[type=radio]').forEach(inp => {
-    inp.addEventListener('change', e => {
-      if (checked) return;
-      saveAnswer(currentExam, parseInt(inp.name.slice(1)), e.target.value);
-      const exam = examById(currentExam);
-      const answers = loadAnswers(currentExam);
-      const answered = exam.questions.filter(q => answers[q.n]).length;
-      document.querySelector('.stats').textContent = `${answered}/${exam.total} marcadas`;
-      const ge = document.getElementById('guideEspStats');
-      const gg = document.getElementById('guideGeralStats');
-      if (ge) ge.textContent = `${guideAnsweredCount(exam, answers, 'esp')}/${exam.guideEspTotal || 0}`;
-      if (gg) gg.textContent = `${guideAnsweredCount(exam, answers, 'geral')}/${exam.guideGeralTotal || 0}`;
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
     });
-  });
-  filterQuestions();
-}
-
-function filterQuestions() {
-  const q = (document.getElementById('searchQ')?.value || '').trim();
-  const only = document.getElementById('onlyMarked')?.checked;
-  const onlyEsp = document.getElementById('onlyGuideEsp')?.checked;
-  const onlyGer = document.getElementById('onlyGuideGeral')?.checked;
-  const answers = loadAnswers(currentExam);
-  document.querySelectorAll('.q-card').forEach(card => {
-    const n = card.dataset.n;
-    const kind = card.dataset.guideKind;
-    const matchSearch = !q || n.includes(q);
-    const matchMarked = !only || !!answers[n];
-    const matchEsp = !onlyEsp || kind === 'esp';
-    const matchGer = !onlyGer || kind === 'geral';
-    card.classList.toggle('hidden', !(matchSearch && matchMarked && matchEsp && matchGer));
-  });
-  document.querySelectorAll('.section-block').forEach(block => {
-    const visible = [...block.querySelectorAll('.q-card')].some(c => !c.classList.contains('hidden'));
-    block.classList.toggle('hidden', !visible);
-  });
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-}
-
-document.getElementById('btnOpenExamModal').addEventListener('click', openExamModal);
-document.getElementById('btnCloseExamModal').addEventListener('click', closeExamModal);
-document.getElementById('examModal').addEventListener('click', (e) => {
-  if (e.target.id === 'examModal') closeExamModal();
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && document.getElementById('examModal').classList.contains('open')) {
-    closeExamModal();
   }
-});
-
-updateNavbar();
-renderExam();
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
-}
 </script>
 </body>
 </html>
