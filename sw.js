@@ -1,5 +1,5 @@
 /* Service worker — Prova FGV PWA */
-const CACHE = 'prova-fgv-v3';
+const CACHE = 'prova-fgv-v4';
 const ASSETS = [
   './',
   './index.html',

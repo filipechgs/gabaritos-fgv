@@ -68,6 +68,22 @@
       .replace(/"/g, "&quot;");
   }
 
+  /** Enunciado com parágrafos visíveis (\\n\\n no data.js). */
+  function formatStem(stem) {
+    var parts = String(stem == null ? "" : stem)
+      .split(/\n\n+/)
+      .map(function (p) {
+        return p.replace(/\n/g, " ").trim();
+      })
+      .filter(Boolean);
+    if (!parts.length) return "";
+    return parts
+      .map(function (p) {
+        return "<p>" + esc(p) + "</p>";
+      })
+      .join("");
+  }
+
   function filteredQuestions() {
     return DATA.questions.filter(function (q) {
       if (filters.examId && q.examId !== filters.examId) return false;
@@ -323,7 +339,7 @@
       (q.tags ? " · " + esc(q.tags) : "") +
       "</p>" +
       '<div class="stem">' +
-      esc(q.stem) +
+      formatStem(q.stem) +
       "</div>" +
       '<div class="opts">' +
       opts +

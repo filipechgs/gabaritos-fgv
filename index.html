@@ -119,9 +119,14 @@
   .q-num { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
   .q-exam { font-size: .72rem; color: var(--muted); }
   .stem {
-    white-space: pre-wrap; font-size: .92rem; margin: 0 0 .85rem;
+    font-size: .92rem; margin: 0 0 .85rem;
     word-break: break-word;
   }
+  .stem p {
+    margin: 0 0 .7em;
+    line-height: 1.45;
+  }
+  .stem p:last-child { margin-bottom: 0; }
   .opts { display: flex; flex-direction: column; gap: .45rem; }
   .opt {
     display: flex; gap: .65rem; align-items: flex-start;
